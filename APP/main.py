@@ -1,6 +1,6 @@
 
 """para llamar un modulo en python siempre se usa la palabra import y el nombre del
-archivo, en este caso vamos a impórtar modulo, que fue eel nombre dado al archivo
+archivo, en este caso vamos a impórtar modulo, que fue el nombre dado al archivo
 y añadir de una vez la funcion que creamos llamada get_population
 una buena practica es llamar al modulo de una forma diciente acorde a lo que hace
 siendo una herramienta de trabajo, ademas es de notar que cualquier archivo que creamos 
@@ -12,6 +12,8 @@ import utils # este modulo fue creado por mi con una funcion, y de esa manera lo
 #como me va a retornar dos valores los puedo asignar como variables
 import read_csv #para leer el csv
 import charts #para graficar el codigo
+import pandas as pd
+
 
 '''keys,values = utils.get_population()'''
 '''print(keys,values)
@@ -36,29 +38,40 @@ data = [
 
 
 def run():
-    data = read_csv.read_csv(
-        'data.csv')
+    #esta parte se comenta ya que se va a usar la libreria panda
+    '''
     data = list(
-        filter(lambda item: item['continent'] == 'South America', data))
-
+        filter(lambda item: item['Continent'] == 'South America', data))
     countries = list(map(lambda x: x['Country'], data))
     percentages = list(map(lambda x: x['World Population percentage'], data))
+    '''
+    df = pd.read_csv('data.csv')
+    df = df[df['Continent'] == 'Africa']
+    countries = df['Country'].values
+    percentages = df['World Population percentage'].values
     charts.generate_pie_chart(countries, percentages)
 
+    data = read_csv.read_csv(
+        'RUTA PLATZI\PROJECT\py-project\APP\data.csv')
     country = input('Type Country => ')
-    #colocamos un imput para solicitar la preferencia de informacion
+    print(country)
+
+    result = utils.Population_by_Country(data, Country,)
+
     
-#usamo una varible le pasamos el modulo utils que contiene el dict y nos va a buscar los 
-#valores de poblacion poor pais, le pasamos la data que es la lectura y el pais que esta en
+#usamos una varible le pasamos el modulo utils que contiene el dict y nos va a buscar los 
+#valores de poblacion por pais, le pasamos la data que es la lectura y el pais que esta en
 #el input.
-    result = utils.Population_by_Country(data, country,)
-    # el resultado debe mayor a cero, una vez encontro a ese pais se lo pasa a la variable
-    # country en la posicion cero y luego a la funcion get_population
     if len(result) > 0:
-        country = result[0]
-        labels, values = utils.get_population(country)
+        Country = result[0]
+        print(country)
+        labels, values = utils.get_population(Country)
         # print(keys,values)
-        charts.generate_bar_chart(labels, values)
+        charts.generate_bar_chart(country['Country'], labels, values)
+    # el resultado debe ser mayor a cero, una vez encontro a ese pais se lo pasa a la variable
+    # country en la posicion cero y luego a la funcion get_population
+    
+    
     
     
     if __name__ == '__main__':
@@ -72,5 +85,5 @@ def run():
 
 
 
-
+run()
     
